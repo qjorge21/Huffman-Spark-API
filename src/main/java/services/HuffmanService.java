@@ -1,0 +1,246 @@
+package services;
+
+import huffman.*;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.PriorityQueue;
+
+// TODO: cambiar static si queda tiempo para inyectar dependencias con springboot
+public class HuffmanService {
+    private static HashMap<Character, String> huffmanCode = new HashMap<>();
+    final static String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\huffman\\";
+
+    private static BinaryTree<FrequencyCharacter> initHuffman(String fileName) throws IOException {
+        String pathFile = FILES_PATH + fileName + ".txt";
+        BinaryTree<FrequencyCharacter> bigTree = getTreeCode(singletonTree(getFrequencyTable(pathFile)));
+
+        getHuffmanCode(bigTree, "");
+        return bigTree;
+    }
+
+    public static void compressHuffmanFile(String fileName){
+        try{
+            String pathFile = FILES_PATH + fileName + ".txt";
+            BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
+            compressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt");
+        } catch (Exception e){
+            System.out.println("Error compress huffman: " + e.getMessage());
+        }
+    }
+
+    public static void decompressHuffmanFile(String fileName){
+        try{
+            String pathFile = FILES_PATH + fileName + ".txt";
+            BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
+            decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);;
+        } catch (Exception e){
+            System.out.println("Error decompress huffman: " + e.getMessage());
+        }
+    }
+
+    public static void runHuffmanCode(){
+        String pathFile = FILES_PATH + "test.txt";
+
+        BinaryTree<FrequencyCharacter> bigTree = getTreeCode(singletonTree(getFrequencyTable(pathFile)));
+
+        System.out.println("********** Tabla de Caracteres y Frecuencias: *************\n");
+
+        // esto tira una posible exc IOExc
+        if (singletonTree(getFrequencyTable(pathFile)) != null) {
+            System.out.println(singletonTree(getFrequencyTable(pathFile)).toString());
+        }
+
+        getHuffmanCode(bigTree, "");
+
+        System.out.println("******************** Codigo de Huffman: ***********************\n");
+
+        System.out.println(huffmanCode.toString());
+
+
+        compressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt");
+
+        decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);
+    }
+
+    private static HashMap<Character, Integer> getFrequencyTable(String path){
+
+        HashMap<Character, Integer> frequencyTable = new HashMap<>();
+        BufferedReader inputFile = null;
+
+        try {
+            inputFile = new BufferedReader(new FileReader(path));
+            int currentInteger;
+
+            while ((currentInteger = inputFile.read()) >= 0) {
+                char q = (char) currentInteger;
+                if (frequencyTable.containsKey(q)) {
+                    frequencyTable.put(q, frequencyTable.get(q) + 1);
+                } else {
+                    frequencyTable.put(q, 1);
+                }
+            }
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        } finally {
+            try {
+                inputFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return frequencyTable;
+    }
+
+    private static PriorityQueue<BinaryTree<FrequencyCharacter>> singletonTree(HashMap<Character, Integer> frequencyTable) {
+
+        if (frequencyTable.size() == 0) {
+            return null;
+        }
+
+        PriorityQueue<BinaryTree<FrequencyCharacter>> frequencyQueue = new PriorityQueue<BinaryTree<FrequencyCharacter>>(frequencyTable.size(), new ComparatorTree());
+
+        for (Character c : frequencyTable.keySet()) {
+
+            FrequencyCharacter singletonNode = new FrequencyCharacter(c, frequencyTable.get(c));
+
+            BinaryTree<FrequencyCharacter> singletonTree = new BinaryTree<FrequencyCharacter>(singletonNode);
+
+            frequencyQueue.add(singletonTree);
+        }
+
+        return frequencyQueue;
+    }
+
+    private static BinaryTree<FrequencyCharacter> getTreeCode(PriorityQueue<BinaryTree<FrequencyCharacter>> frequency) {
+
+        if (frequency == null) {
+            BinaryTree<FrequencyCharacter> emptyTree = new BinaryTree<FrequencyCharacter>(null);
+            return emptyTree;
+        }
+
+        if (frequency.size() == 1) {
+
+            FrequencyCharacter rootNode = new FrequencyCharacter(frequency.peek().getData().getFrequency());
+
+            BinaryTree<FrequencyCharacter> character = new BinaryTree<FrequencyCharacter>(rootNode);
+
+            character.setLeft(frequency.poll());
+
+            return character;
+        }
+
+        while (frequency.size() > 1) {
+
+            BinaryTree<FrequencyCharacter> t1 = frequency.poll();
+            BinaryTree<FrequencyCharacter> t2 = frequency.poll();
+
+            FrequencyCharacter root = new FrequencyCharacter(t1.getData().getFrequency() + t2.getData().getFrequency());
+
+            BinaryTree<FrequencyCharacter> bigTree = new BinaryTree<FrequencyCharacter>(root);
+            bigTree.setLeft(t1);
+            bigTree.setRight(t2);
+
+            frequency.add(bigTree);
+        }
+
+        return frequency.poll();
+    }
+
+    private static void getHuffmanCode(BinaryTree<FrequencyCharacter> node, String pathCode) {
+
+        if (node.getData() == null) {
+            return;
+        }
+
+        if (node.isLeafNode()) {
+            huffmanCode.put(node.getData().getCharacter(), pathCode);
+        }
+
+        if (node.hasLeftChild()) {
+            getHuffmanCode(node.getLeft(), pathCode + '0');
+        }
+
+        if (node.hasRightChild()) {
+            getHuffmanCode(node.getRight(), pathCode + '1');
+        }
+    }
+
+    public static void compressHuffman(String input, String output) {
+
+        BufferedReader inputFile = null;
+        WriteBit outputFileBits = null;
+
+        try {
+            inputFile = new BufferedReader(new FileReader(input));
+            outputFileBits = new WriteBit(output);
+
+            int currentValue;
+
+            while ((currentValue = inputFile.read()) >= 0) {
+                char characterRead = (char) currentValue;
+
+                String codeWord = huffmanCode.get(characterRead);
+
+                for (int i = 0; i < codeWord.length(); i++) {
+                    char b = codeWord.charAt(i);
+                    if (b == '0') {
+                        outputFileBits.writingBit(0);
+                    } else {
+                        outputFileBits.writingBit(1);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputFile.close();
+                outputFileBits.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private static void decompressHuffman(String input, String output, BinaryTree<FrequencyCharacter> nodeFrequency) {
+
+        ReadBit inputFileBits = null;
+        BufferedWriter outputFile = null;
+
+        try {
+            inputFileBits = new ReadBit(input);
+            outputFile = new BufferedWriter(new FileWriter(output));
+            int bit;
+
+            BinaryTree<FrequencyCharacter> root = nodeFrequency;
+
+            while ((bit = inputFileBits.bitRead()) >= 0) {
+
+                if (bit == 0) {
+                    nodeFrequency = nodeFrequency.getLeft();
+                }
+
+                if (bit == 1) {
+                    nodeFrequency = nodeFrequency.getRight();
+                }
+
+                if (nodeFrequency.isLeafNode()) {
+                    outputFile.write(nodeFrequency.getData().getCharacter());
+                    nodeFrequency = root;
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                inputFileBits.close();
+                outputFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
