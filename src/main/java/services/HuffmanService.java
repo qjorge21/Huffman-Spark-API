@@ -9,10 +9,10 @@ import java.util.PriorityQueue;
 public class HuffmanService {
     private HashMap<Character, String> huffmanCode = new HashMap<>();
 
-    final String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\huffman\\";
+    // TODO: cambiar para que sea "relativo" el path y no absoluto
+    final String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\files\\";
 
     public HuffmanService(){
-
     }
 
     private BinaryTree<FrequencyCharacter> initHuffman(String fileName){
