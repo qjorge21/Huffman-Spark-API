@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d67a748f-657c-46cc-bfd5-581b42281255" name="Default Changelist" comment="" />
+    <list default="true" id="d67a748f-657c-46cc-bfd5-581b42281255" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/services/HuffmanValidatorService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/controllers/HuffmanController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/controllers/HuffmanController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/services/HuffmanService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/services/HuffmanService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/controllers/HuffmanController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/controllers/HuffmanController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/services/HuffmanService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/services/HuffmanService.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../Huffman-Maven\exportToHTML" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -15,7 +28,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/Huffman-API" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="2FGlKStVIcRQtF9ROVlOyIvAW9U" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -26,7 +39,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/huffman" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -84,46 +97,50 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="267" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665856600783" />
-    <state x="715" y="223" key="#xdebugger.evaluate" timestamp="1665868698874">
+    <state x="715" y="223" key="#xdebugger.evaluate" timestamp="1668788483645">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="715" y="223" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665868698874" />
-    <state width="1875" height="279" key="GridCell.Tab.0.bottom" timestamp="1665870480616">
+    <state x="715" y="223" key="#xdebugger.evaluate/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668788483645" />
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1668792185382">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665870480616" />
-    <state width="1875" height="279" key="GridCell.Tab.0.center" timestamp="1665870480616">
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185382" />
+    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1668792185382">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="279" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665870480616" />
-    <state width="1875" height="279" key="GridCell.Tab.0.left" timestamp="1665870480616">
+    <state width="1877" height="280" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185382" />
+    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1668792185382">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="279" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665870480616" />
-    <state width="1875" height="279" key="GridCell.Tab.0.right" timestamp="1665870480616">
+    <state width="1877" height="280" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185382" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1668792185382">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="279" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665870480616" />
-    <state width="1875" height="346" key="GridCell.Tab.1.bottom" timestamp="1665869542679">
+    <state width="1877" height="280" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185382" />
+    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1668792185378">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="346" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665869542679" />
-    <state width="1875" height="346" key="GridCell.Tab.1.center" timestamp="1665869542679">
+    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185378" />
+    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1668792185378">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="346" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665869542679" />
-    <state width="1875" height="346" key="GridCell.Tab.1.left" timestamp="1665869542679">
+    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185378" />
+    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1668792185378">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="346" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665869542679" />
-    <state width="1875" height="346" key="GridCell.Tab.1.right" timestamp="1665869542679">
+    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185378" />
+    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1668792185378">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1875" height="346" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665869542679" />
+    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668792185378" />
     <state x="440" y="94" key="SettingsEditor" timestamp="1665851397259">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="440" y="94" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1665851397259" />
+    <state x="342" y="215" key="new project wizard" timestamp="1668786535738">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="342" y="215" key="new project wizard/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1668786535738" />
     <state x="623" y="225" width="840" height="1034" key="search.everywhere.popup" timestamp="1665450200513">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
