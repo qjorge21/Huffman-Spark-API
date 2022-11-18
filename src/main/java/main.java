@@ -7,7 +7,6 @@ public class main {
         HuffmanController huffmanController = new HuffmanController();
         // routes
         get("/hello", (req, res) -> "Hello World");
-        post("/runHuffmanCode", huffmanController::runHuffmanCode);
         post("/compressHuffman", huffmanController::compressHuffman);
         post("/decompressHuffman", huffmanController::decompressHuffman);
 

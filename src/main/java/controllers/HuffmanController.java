@@ -7,36 +7,14 @@ import services.HuffmanService;
 import services.HuffmanValidatorService;
 import spark.Request;
 import spark.Response;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.apache.commons.httpclient.HttpStatus;
 import utils.JsonTransformer;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 public class HuffmanController {
     HuffmanService huffmanService = new HuffmanService();
     HuffmanValidatorService huffmanValidatorService = new HuffmanValidatorService();
 
-    public Object runHuffmanCode(Request request, Response response) throws IOException {
-        HashMap<Object, Object> model = new HashMap<>();
-        ObjectMapper mapperObj = new ObjectMapper();
-        try {
-            String body = request.body();
-
-            HuffmanInputDTO huffmanInputDTO = JsonTransformer.fromJson(body, HuffmanInputDTO.class);
-
-            huffmanService.runHuffmanCode();
-        } catch (Exception e){
-            System.out.println("Error run huffman code: " + e.getMessage());
-            model.put("Response", e.getMessage());
-        } finally {
-            response.status(HttpStatus.SC_OK);
-            return mapperObj.writeValueAsString(model);
-        }
-    };
-
-    public Object compressHuffman(Request request, Response response) throws IOException {
+    public Object compressHuffman(Request request, Response response){
         HuffmanCompressOutputDTO huffmanCompressOutputDTO = new HuffmanCompressOutputDTO();
 
         try{
@@ -50,10 +28,10 @@ public class HuffmanController {
                 throw new Exception("Invalid input file name");
             }
 
-            huffmanService.compressHuffmanFile(huffmanInputDTO.getFileName());
+            huffmanService.compressHuffmanFile(huffmanInputDTO.getFileName(), huffmanCompressOutputDTO);
 
             huffmanCompressOutputDTO.setMessage("Huffman compress success!");
-            // agregar tiempo de respuesta y tamaño de compresion...
+            response.status(HttpStatus.SC_CREATED);
         } catch (Exception e){
             System.out.println("Error compress huffman: " + e.getMessage());
             huffmanCompressOutputDTO.setMessage(e.getMessage());
@@ -62,7 +40,7 @@ public class HuffmanController {
         }
     }
 
-    public Object decompressHuffman(Request request, Response response) throws IOException {
+    public Object decompressHuffman(Request request, Response response){
         HuffmanDecompressOutputDTO huffmanDecompressOutputDTO = new HuffmanDecompressOutputDTO();
 
         try{

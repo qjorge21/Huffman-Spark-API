@@ -1,6 +1,8 @@
 package services;
 
+import dtos.HuffmanCompressOutputDTO;
 import huffman.*;
+import utils.Utils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -23,11 +25,27 @@ public class HuffmanService {
         return bigTree;
     }
 
-    public void compressHuffmanFile(String fileName){
+    public void compressHuffmanFile(String fileName, HuffmanCompressOutputDTO huffmanCompressOutputDTO){
         try{
-            String pathFile = FILES_PATH + fileName + ".txt";
-            BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
-            compressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt");
+            String inputPathFile = FILES_PATH + fileName + ".txt";
+            String outputPathFile = inputPathFile.substring(0, inputPathFile.length() - 4) + "_comprimido" + ".txt";
+
+            initHuffman(fileName);
+
+            long startTime = System.currentTimeMillis();
+
+            compressHuffman(inputPathFile, outputPathFile);
+
+            long timeElapsed = System.currentTimeMillis() - startTime;
+
+            // metricas de tamaño de reduccion
+            long inputSize = Utils.getFileSize(inputPathFile);
+            long outputSize = Utils.getFileSize(outputPathFile);
+
+            huffmanCompressOutputDTO.setSizeBytesInput(inputSize);
+            huffmanCompressOutputDTO.setSizeBytesOutput(outputSize);
+            huffmanCompressOutputDTO.setCompressPercent(Utils.calculatePercent(inputSize, outputSize));
+            huffmanCompressOutputDTO.setTimeElapsed(timeElapsed);
         } catch (Exception e){
             System.out.println("Error compress huffman: " + e.getMessage());
         }
@@ -41,30 +59,6 @@ public class HuffmanService {
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
         }
-    }
-
-    public void runHuffmanCode(){
-        String pathFile = FILES_PATH + "test.txt";
-
-        BinaryTree<FrequencyCharacter> bigTree = getTreeCode(singletonTree(getFrequencyTable(pathFile)));
-
-        System.out.println("********** Tabla de Caracteres y Frecuencias: *************\n");
-
-        // esto tira una posible exc IOExc
-        if (singletonTree(getFrequencyTable(pathFile)) != null) {
-            System.out.println(singletonTree(getFrequencyTable(pathFile)).toString());
-        }
-
-        getHuffmanCode(bigTree, "");
-
-        System.out.println("******************** Codigo de Huffman: ***********************\n");
-
-        System.out.println(huffmanCode.toString());
-
-
-        compressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt");
-
-        decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);
     }
 
     private HashMap<Character, Integer> getFrequencyTable(String path){
