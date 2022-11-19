@@ -1,6 +1,7 @@
 package services;
 
 import dtos.HuffmanCompressOutputDTO;
+import dtos.HuffmanDecompressOutputDTO;
 import huffman.*;
 import utils.Utils;
 
@@ -12,7 +13,8 @@ public class HuffmanService {
     private HashMap<Character, String> huffmanCode = new HashMap<>();
 
     // TODO: cambiar para que sea "relativo" el path y no absoluto
-    final String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\files\\";
+    //final String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\files\\";
+    final String FILES_PATH = "";
 
     public HuffmanService(){
     }
@@ -28,6 +30,7 @@ public class HuffmanService {
     public void compressHuffmanFile(String fileName, HuffmanCompressOutputDTO huffmanCompressOutputDTO){
         try{
             String inputPathFile = FILES_PATH + fileName + ".txt";
+
             String outputPathFile = inputPathFile.substring(0, inputPathFile.length() - 4) + "_comprimido" + ".txt";
 
             initHuffman(fileName);
@@ -51,11 +54,19 @@ public class HuffmanService {
         }
     }
 
-    public void decompressHuffmanFile(String fileName){
+    public void decompressHuffmanFile(String fileName, HuffmanDecompressOutputDTO huffmanDecompressOutputDTO){
         try{
             String pathFile = FILES_PATH + fileName + ".txt";
             BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
-            decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);;
+
+            long startTime = System.currentTimeMillis();
+
+            decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);
+
+            long timeElapsed = System.currentTimeMillis() - startTime;
+
+            huffmanDecompressOutputDTO.setTimeElapsed(timeElapsed);
+
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
         }
@@ -67,6 +78,7 @@ public class HuffmanService {
         BufferedReader inputFile = null;
 
         try {
+            System.out.println("El path es: " + path);
             inputFile = new BufferedReader(new FileReader(path));
             int currentInteger;
 

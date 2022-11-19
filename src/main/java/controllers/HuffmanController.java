@@ -53,7 +53,7 @@ public class HuffmanController {
                 huffmanDecompressOutputDTO.setMessage("Invalid input file name");
                 throw new Exception("Invalid input file name");
             }
-            huffmanService.decompressHuffmanFile(huffmanInputDTO.getFileName());
+            huffmanService.decompressHuffmanFile(huffmanInputDTO.getFileName(), huffmanDecompressOutputDTO);
 
             huffmanDecompressOutputDTO.setMessage("Huffman compress success!");
         } catch (Exception e){

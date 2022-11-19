@@ -1,10 +1,12 @@
 package dtos;
 
-import java.math.BigDecimal;
+import com.google.gson.annotations.SerializedName;
 
 public class HuffmanDecompressOutputDTO {
     private String message;
-    private BigDecimal time = BigDecimal.ZERO;
+
+    @SerializedName("time_elapsed")
+    private long timeElapsed;
 
     public String getMessage() {
         return message;
@@ -14,11 +16,11 @@ public class HuffmanDecompressOutputDTO {
         this.message = message;
     }
 
-    public BigDecimal getTime() {
-        return time;
+    public long getTimeElapsed() {
+        return timeElapsed;
     }
 
-    public void setTime(BigDecimal time) {
-        this.time = time;
+    public void setTimeElapsed(long timeElapsed) {
+        this.timeElapsed = timeElapsed;
     }
 }
