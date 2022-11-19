@@ -1,52 +1,66 @@
 package controllers;
 
+import dtos.HuffmanCompressOutputDTO;
+import dtos.HuffmanDecompressOutputDTO;
+import dtos.HuffmanInputDTO;
 import services.HuffmanService;
+import services.HuffmanValidatorService;
 import spark.Request;
 import spark.Response;
-import spark.Route;
-import org.codehaus.jackson.map.ObjectMapper;
-
-import java.util.HashMap;
+import org.apache.commons.httpclient.HttpStatus;
+import utils.JsonTransformer;
 
 public class HuffmanController {
-    public static Route runHuffmanCode = (Request req, Response res) -> {
-        HashMap<Object, Object> model = new HashMap<>();
-        ObjectMapper mapperObj = new ObjectMapper();
-        try {
-            HuffmanService.runHuffmanCode();
-        } catch (Exception e){
-            System.out.println("Error run huffman code: " + e.getMessage());
-            model.put("Response", e.getMessage());
-        } finally {
-            return mapperObj.writeValueAsString(model);
-        }
-    };
+    HuffmanService huffmanService = new HuffmanService();
+    HuffmanValidatorService huffmanValidatorService = new HuffmanValidatorService();
 
-    public static Route compressHuffman = (Request req, Response res) -> {
-        HashMap<Object, Object> model = new HashMap<>();
-        ObjectMapper mapperObj = new ObjectMapper();
+    public Object compressHuffman(Request request, Response response){
+        HuffmanCompressOutputDTO huffmanCompressOutputDTO = new HuffmanCompressOutputDTO();
 
         try{
-            HuffmanService.compressHuffmanFile("test");
+            String body = request.body();
+            // TODO: ver como manejar mejor la excepcion ante formato no valido del body DTO
+            HuffmanInputDTO huffmanInputDTO = JsonTransformer.fromJson(body, HuffmanInputDTO.class);
+
+            if (!huffmanValidatorService.isValidInput(huffmanInputDTO)) {
+                response.status(HttpStatus.SC_BAD_REQUEST);
+                huffmanCompressOutputDTO.setMessage("Invalid input file name");
+                throw new Exception("Invalid input file name");
+            }
+
+            huffmanService.compressHuffmanFile(huffmanInputDTO.getFileName(), huffmanCompressOutputDTO);
+
+            huffmanCompressOutputDTO.setMessage("Huffman compress success!");
+            response.status(HttpStatus.SC_CREATED);
         } catch (Exception e){
             System.out.println("Error compress huffman: " + e.getMessage());
-            model.put("Response", e.getMessage());
+            huffmanCompressOutputDTO.setMessage(e.getMessage());
         } finally {
-            return mapperObj.writeValueAsString(model);
+            return JsonTransformer.toJson(huffmanCompressOutputDTO);
         }
-    };
+    }
 
-    public static Route decompressHuffman = (Request req, Response res) -> {
-        HashMap<Object, Object> model = new HashMap<>();
-        ObjectMapper mapperObj = new ObjectMapper();
+    public Object decompressHuffman(Request request, Response response){
+        HuffmanDecompressOutputDTO huffmanDecompressOutputDTO = new HuffmanDecompressOutputDTO();
 
         try{
-            HuffmanService.decompressHuffmanFile("test");
+            String body = request.body();
+            // TODO: ver como manejar mejor la excepcion ante formato no valido del body DTO
+            HuffmanInputDTO huffmanInputDTO = JsonTransformer.fromJson(body, HuffmanInputDTO.class);
+
+            if (!huffmanValidatorService.isValidInput(huffmanInputDTO)) {
+                response.status(HttpStatus.SC_BAD_REQUEST);
+                huffmanDecompressOutputDTO.setMessage("Invalid input file name");
+                throw new Exception("Invalid input file name");
+            }
+            huffmanService.decompressHuffmanFile(huffmanInputDTO.getFileName(), huffmanDecompressOutputDTO);
+
+            huffmanDecompressOutputDTO.setMessage("Huffman compress success!");
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
-            model.put("Response", e.getMessage());
+            huffmanDecompressOutputDTO.setMessage(e.getMessage());
         } finally {
-            return mapperObj.writeValueAsString(model);
+            return JsonTransformer.toJson(huffmanDecompressOutputDTO);
         }
-    };
+    }
 }

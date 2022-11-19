@@ -1,17 +1,25 @@
 package services;
 
+import dtos.HuffmanCompressOutputDTO;
+import dtos.HuffmanDecompressOutputDTO;
 import huffman.*;
+import utils.Utils;
 
 import java.io.*;
 import java.util.HashMap;
 import java.util.PriorityQueue;
 
-// TODO: cambiar static si queda tiempo para inyectar dependencias con springboot
 public class HuffmanService {
-    private static HashMap<Character, String> huffmanCode = new HashMap<>();
-    final static String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\huffman\\";
+    private HashMap<Character, String> huffmanCode = new HashMap<>();
 
-    private static BinaryTree<FrequencyCharacter> initHuffman(String fileName) throws IOException {
+    // TODO: cambiar para que sea "relativo" el path y no absoluto
+    //final String FILES_PATH = "C:\\Users\\George\\Documents\\Huffman-Maven\\src\\main\\java\\files\\";
+    final String FILES_PATH = "";
+
+    public HuffmanService(){
+    }
+
+    private BinaryTree<FrequencyCharacter> initHuffman(String fileName){
         String pathFile = FILES_PATH + fileName + ".txt";
         BinaryTree<FrequencyCharacter> bigTree = getTreeCode(singletonTree(getFrequencyTable(pathFile)));
 
@@ -19,56 +27,58 @@ public class HuffmanService {
         return bigTree;
     }
 
-    public static void compressHuffmanFile(String fileName){
+    public void compressHuffmanFile(String fileName, HuffmanCompressOutputDTO huffmanCompressOutputDTO){
         try{
-            String pathFile = FILES_PATH + fileName + ".txt";
-            BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
-            compressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt");
+            String inputPathFile = FILES_PATH + fileName + ".txt";
+
+            String outputPathFile = inputPathFile.substring(0, inputPathFile.length() - 4) + "_comprimido" + ".txt";
+
+            initHuffman(fileName);
+
+            long startTime = System.currentTimeMillis();
+
+            compressHuffman(inputPathFile, outputPathFile);
+
+            long timeElapsed = System.currentTimeMillis() - startTime;
+
+            // metricas de tamaño de reduccion
+            long inputSize = Utils.getFileSize(inputPathFile);
+            long outputSize = Utils.getFileSize(outputPathFile);
+
+            huffmanCompressOutputDTO.setSizeBytesInput(inputSize);
+            huffmanCompressOutputDTO.setSizeBytesOutput(outputSize);
+            huffmanCompressOutputDTO.setCompressPercent(Utils.calculatePercent(inputSize, outputSize));
+            huffmanCompressOutputDTO.setTimeElapsed(timeElapsed);
         } catch (Exception e){
             System.out.println("Error compress huffman: " + e.getMessage());
         }
     }
 
-    public static void decompressHuffmanFile(String fileName){
+    public void decompressHuffmanFile(String fileName, HuffmanDecompressOutputDTO huffmanDecompressOutputDTO){
         try{
             String pathFile = FILES_PATH + fileName + ".txt";
             BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
-            decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);;
+
+            long startTime = System.currentTimeMillis();
+
+            decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);
+
+            long timeElapsed = System.currentTimeMillis() - startTime;
+
+            huffmanDecompressOutputDTO.setTimeElapsed(timeElapsed);
+
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
         }
     }
 
-    public static void runHuffmanCode(){
-        String pathFile = FILES_PATH + "test.txt";
-
-        BinaryTree<FrequencyCharacter> bigTree = getTreeCode(singletonTree(getFrequencyTable(pathFile)));
-
-        System.out.println("********** Tabla de Caracteres y Frecuencias: *************\n");
-
-        // esto tira una posible exc IOExc
-        if (singletonTree(getFrequencyTable(pathFile)) != null) {
-            System.out.println(singletonTree(getFrequencyTable(pathFile)).toString());
-        }
-
-        getHuffmanCode(bigTree, "");
-
-        System.out.println("******************** Codigo de Huffman: ***********************\n");
-
-        System.out.println(huffmanCode.toString());
-
-
-        compressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt");
-
-        decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);
-    }
-
-    private static HashMap<Character, Integer> getFrequencyTable(String path){
+    private HashMap<Character, Integer> getFrequencyTable(String path){
 
         HashMap<Character, Integer> frequencyTable = new HashMap<>();
         BufferedReader inputFile = null;
 
         try {
+            System.out.println("El path es: " + path);
             inputFile = new BufferedReader(new FileReader(path));
             int currentInteger;
 
@@ -93,7 +103,7 @@ public class HuffmanService {
         return frequencyTable;
     }
 
-    private static PriorityQueue<BinaryTree<FrequencyCharacter>> singletonTree(HashMap<Character, Integer> frequencyTable) {
+    private PriorityQueue<BinaryTree<FrequencyCharacter>> singletonTree(HashMap<Character, Integer> frequencyTable) {
 
         if (frequencyTable.size() == 0) {
             return null;
@@ -113,7 +123,7 @@ public class HuffmanService {
         return frequencyQueue;
     }
 
-    private static BinaryTree<FrequencyCharacter> getTreeCode(PriorityQueue<BinaryTree<FrequencyCharacter>> frequency) {
+    private BinaryTree<FrequencyCharacter> getTreeCode(PriorityQueue<BinaryTree<FrequencyCharacter>> frequency) {
 
         if (frequency == null) {
             BinaryTree<FrequencyCharacter> emptyTree = new BinaryTree<FrequencyCharacter>(null);
@@ -148,7 +158,7 @@ public class HuffmanService {
         return frequency.poll();
     }
 
-    private static void getHuffmanCode(BinaryTree<FrequencyCharacter> node, String pathCode) {
+    private void getHuffmanCode(BinaryTree<FrequencyCharacter> node, String pathCode) {
 
         if (node.getData() == null) {
             return;
@@ -167,7 +177,7 @@ public class HuffmanService {
         }
     }
 
-    public static void compressHuffman(String input, String output) {
+    public void compressHuffman(String input, String output) {
 
         BufferedReader inputFile = null;
         WriteBit outputFileBits = null;
@@ -204,7 +214,7 @@ public class HuffmanService {
         }
     }
 
-    private static void decompressHuffman(String input, String output, BinaryTree<FrequencyCharacter> nodeFrequency) {
+    private void decompressHuffman(String input, String output, BinaryTree<FrequencyCharacter> nodeFrequency) {
 
         ReadBit inputFileBits = null;
         BufferedWriter outputFile = null;
