@@ -55,7 +55,7 @@ public class HuffmanController {
             }
             huffmanService.decompressHuffmanFile(huffmanInputDTO.getFileName(), huffmanDecompressOutputDTO);
 
-            huffmanDecompressOutputDTO.setMessage("Huffman compress success!");
+            huffmanDecompressOutputDTO.setMessage("Huffman decompress success!");
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
             huffmanDecompressOutputDTO.setMessage(e.getMessage());
