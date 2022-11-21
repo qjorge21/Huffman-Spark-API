@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class HuffmanDecompressOutputDTO {
     private String message;
-
     @SerializedName("time_elapsed")
     private long timeElapsed;
 

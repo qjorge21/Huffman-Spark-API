@@ -34,7 +34,11 @@ public class HuffmanController {
             response.status(HttpStatus.SC_CREATED);
         } catch (Exception e){
             System.out.println("Error compress huffman: " + e.getMessage());
-            huffmanCompressOutputDTO.setMessage(e.getMessage());
+            huffmanCompressOutputDTO.setMessage("Error compress huffman:" + e.getMessage());
+            if (e.getMessage() != "Invalid input file name"){
+                response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            }
+
         } finally {
             return JsonTransformer.toJson(huffmanCompressOutputDTO);
         }
@@ -56,9 +60,13 @@ public class HuffmanController {
             huffmanService.decompressHuffmanFile(huffmanInputDTO.getFileName(), huffmanDecompressOutputDTO);
 
             huffmanDecompressOutputDTO.setMessage("Huffman decompress success!");
+            response.status(HttpStatus.SC_CREATED);
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
-            huffmanDecompressOutputDTO.setMessage(e.getMessage());
+            huffmanDecompressOutputDTO.setMessage("Error decompress huffman:" + e.getMessage());
+            if (e.getMessage() != "Invalid input file name"){
+                response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            }
         } finally {
             return JsonTransformer.toJson(huffmanDecompressOutputDTO);
         }

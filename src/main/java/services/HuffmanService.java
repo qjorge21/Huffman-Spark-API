@@ -18,7 +18,7 @@ public class HuffmanService {
     }
 
     private BinaryTree<FrequencyCharacter> initHuffman(String fileName){
-        String pathFile = FILES_PATH + fileName + ".txt";
+        String pathFile = FILES_PATH + fileName;
         BinaryTree<FrequencyCharacter> bigTree = getTreeCode(singletonTree(getFrequencyTable(pathFile)));
 
         getHuffmanCode(bigTree, "");
@@ -27,9 +27,9 @@ public class HuffmanService {
 
     public void compressHuffmanFile(String fileName, HuffmanCompressOutputDTO huffmanCompressOutputDTO){
         try{
-            String inputPathFile = FILES_PATH + fileName + ".txt";
+            String inputPathFile = FILES_PATH + fileName;
 
-            String outputPathFile = inputPathFile.substring(0, inputPathFile.length() - 4) + "_comprimido" + ".txt";
+            String outputPathFile = inputPathFile.substring(0, inputPathFile.length() - 4) + ".HUF";
 
             initHuffman(fileName);
 
@@ -39,7 +39,6 @@ public class HuffmanService {
 
             long timeElapsed = System.currentTimeMillis() - startTime;
 
-            // metricas de tamaño de reduccion
             long inputSize = Utils.getFileSize(inputPathFile);
             long outputSize = Utils.getFileSize(outputPathFile);
 
@@ -53,18 +52,18 @@ public class HuffmanService {
     }
 
     public void decompressHuffmanFile(String fileName, HuffmanDecompressOutputDTO huffmanDecompressOutputDTO){
+        System.out.println("Entra al  decompressHuffmanFile()");
         try{
-            String pathFile = FILES_PATH + fileName + ".txt";
-            BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName);
+            String pathFile = FILES_PATH + fileName;
+            BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName.substring(0, fileName.length() - 4) + ".txt");
 
             long startTime = System.currentTimeMillis();
 
-            decompressHuffman(pathFile.substring(0, pathFile.length() - 4) + "_comprimido" + ".txt", pathFile.substring(0, pathFile.length() - 4) + "_descomprimido" + ".txt", bigTree);
+            decompressHuffman(pathFile, pathFile.substring(0, pathFile.length() - 4) + ".DHU", bigTree);
 
             long timeElapsed = System.currentTimeMillis() - startTime;
 
             huffmanDecompressOutputDTO.setTimeElapsed(timeElapsed);
-
         } catch (Exception e){
             System.out.println("Error decompress huffman: " + e.getMessage());
         }
@@ -76,7 +75,6 @@ public class HuffmanService {
         BufferedReader inputFile = null;
 
         try {
-            System.out.println("El path es: " + path);
             inputFile = new BufferedReader(new FileReader(path));
             int currentInteger;
 

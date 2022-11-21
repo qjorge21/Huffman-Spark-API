@@ -5,8 +5,6 @@ import static spark.Spark.*;
 
 public class main {
     public static void main(String[] args) {
-        HuffmanController huffmanController = new HuffmanController();
-
         Spark.options("/*", (request, response) -> {
 
             String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
@@ -24,6 +22,8 @@ public class main {
         Spark.before((request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
         });
+
+        HuffmanController huffmanController = new HuffmanController();
         // routes
         get("/hello", (req, res) -> "Hello World");
         post("/compressHuffman", huffmanController::compressHuffman);
