@@ -3,3 +3,4 @@
 Huffman-Maven.iml
 .idea/jarRepositories.xml
 .target/*
+*.class
