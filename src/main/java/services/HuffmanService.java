@@ -52,6 +52,7 @@ public class HuffmanService {
     }
 
     public void decompressHuffmanFile(String fileName, HuffmanDecompressOutputDTO huffmanDecompressOutputDTO){
+        System.out.println("Entra al  decompressHuffmanFile()");
         try{
             String pathFile = FILES_PATH + fileName;
             BinaryTree<FrequencyCharacter> bigTree = initHuffman(fileName.substring(0, fileName.length() - 4) + ".txt");
